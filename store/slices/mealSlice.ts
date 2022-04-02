@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Meal, MealState } from '../../types'
+import { Meal, MealDetail, MealState } from '../../types'
 import apiClient from '../../utils/apiClient'
 
 export const getMealsByCategoryName = createAsyncThunk(
@@ -7,6 +7,14 @@ export const getMealsByCategoryName = createAsyncThunk(
   async ({ categoryName }: { categoryName: string }) => {
     const { data } = await apiClient.get(`filter.php?c=${categoryName}`)
     return data.meals
+  }
+)
+
+export const getMealDetail = createAsyncThunk(
+  'meal/getMealDetail',
+  async ({ mealId }: { mealId: string }) => {
+    const { data } = await apiClient.get(`lookup.php?i=${mealId}`)
+    return data.meals[0]
   }
 )
 
@@ -35,6 +43,21 @@ const mealSlice = createSlice({
       state.error = action.error.message || 'Something went wrong'
     })
     builder.addCase(getMealsByCategoryName.pending, (state) => {
+      state.status = 'loading'
+    })
+    builder.addCase(
+      getMealDetail.fulfilled,
+      (state, action: PayloadAction<MealDetail>) => {
+        state.status = 'idle'
+        state.selectedMeal = action.payload
+        state.error = null
+      }
+    )
+    builder.addCase(getMealDetail.rejected, (state, action) => {
+      state.status = 'error'
+      state.error = action.error.message || 'Something went wrong'
+    })
+    builder.addCase(getMealDetail.pending, (state) => {
       state.status = 'loading'
     })
   },

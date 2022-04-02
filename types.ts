@@ -1,7 +1,7 @@
 export type RootStackPramList = {
   Categories: undefined
   Meals: { categoryName: string }
-  MealDetail: undefined
+  MealDetail: { mealId: string }
 }
 
 type Status = 'idle' | 'loading' | 'error'
@@ -14,12 +14,19 @@ export type CategoryState = {
 
 export type MealState = {
   meals: Meal[]
-  selectedMeal: Meal | null
+  selectedMeal: MealDetail | null
   status: Status
   error: string | null
 }
 
 export type Meal = {
+  idMeal: string
+  strMeal: string
+  strMealThumb: string
+}
+
+export type MealDetail = {
+  strInstructions: string
   idMeal: string
   strMeal: string
   strMealThumb: string

@@ -4,10 +4,12 @@ import {
   ActivityIndicator,
   FlatList,
   ListRenderItem,
+  Pressable,
   StyleSheet,
   View,
 } from 'react-native'
 import MealItem from '../components/MealItem'
+import useRootStackNavigation from '../hooks/useRootStackNavigation'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { getMealsByCategoryName } from '../store/slices/mealSlice'
 import Colors from '../theme/Colors'
@@ -20,16 +22,24 @@ const Meals = () => {
     params: { categoryName },
   } = useRoute<RouteProp<RootStackPramList, 'Meals'>>()
 
+  const rootStackNavigation = useRootStackNavigation()
+
   const dispatch = useAppDispatch()
 
   useEffect(() => {
     dispatch(getMealsByCategoryName({ categoryName }))
   }, [])
 
+  const goToMealDetailScreen = (mealId: string) => () =>
+    rootStackNavigation.navigate('MealDetail', { mealId })
+
   const renderMealItem: ListRenderItem<Meal> = ({ item }) => (
-    <View style={styles.mealWrapper}>
+    <Pressable
+      onPress={goToMealDetailScreen(item.idMeal)}
+      style={styles.mealWrapper}
+    >
       <MealItem meal={item} />
-    </View>
+    </Pressable>
   )
 
   if (status === 'loading')
