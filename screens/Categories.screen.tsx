@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import {
+  ActivityIndicator,
   FlatList,
   ListRenderItem,
   Pressable,
@@ -14,7 +15,7 @@ import Colors from '../theme/Colors'
 import { Category } from '../types'
 
 const Categories = () => {
-  const { categories } = useAppSelector((state) => state.category)
+  const { categories, status } = useAppSelector((state) => state.category)
   const dispatch = useAppDispatch()
   const rootStackNavigation = useRootStackNavigation()
 
@@ -34,6 +35,16 @@ const Categories = () => {
     </Pressable>
   )
 
+  if (status === 'loading')
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator
+          size="large"
+          color={Colors.primaryDark}
+        />
+      </View>
+    )
+
   return (
     <View style={styles.screen}>
       <FlatList
@@ -52,6 +63,11 @@ const styles = StyleSheet.create({
   },
   categoryWrapper: {
     marginVertical: 10,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
 

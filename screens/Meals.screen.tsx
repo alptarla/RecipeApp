@@ -1,6 +1,12 @@
 import { RouteProp, useRoute } from '@react-navigation/native'
 import React, { useEffect } from 'react'
-import { FlatList, ListRenderItem, StyleSheet, View } from 'react-native'
+import {
+  ActivityIndicator,
+  FlatList,
+  ListRenderItem,
+  StyleSheet,
+  View,
+} from 'react-native'
 import MealItem from '../components/MealItem'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { getMealsByCategoryName } from '../store/slices/mealSlice'
@@ -8,7 +14,7 @@ import Colors from '../theme/Colors'
 import { Meal, RootStackPramList } from '../types'
 
 const Meals = () => {
-  const { meals } = useAppSelector((state) => state.meal)
+  const { meals, status } = useAppSelector((state) => state.meal)
 
   const {
     params: { categoryName },
@@ -25,6 +31,16 @@ const Meals = () => {
       <MealItem meal={item} />
     </View>
   )
+
+  if (status === 'loading')
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator
+          size="large"
+          color={Colors.primaryDark}
+        />
+      </View>
+    )
 
   return (
     <View style={styles.screen}>
@@ -46,5 +62,10 @@ const styles = StyleSheet.create({
   },
   mealWrapper: {
     margin: 10,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
