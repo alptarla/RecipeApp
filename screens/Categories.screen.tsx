@@ -1,9 +1,16 @@
 import React, { useEffect } from 'react'
-import { FlatList, ListRenderItem, Pressable, StyleSheet } from 'react-native'
+import {
+  FlatList,
+  ListRenderItem,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native'
 import CategoryItem from '../components/CategoryItem'
 import useRootStackNavigation from '../hooks/useRootStackNavigation'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { getCategories } from '../store/slices/categorySlice'
+import Colors from '../theme/Colors'
 import { Category } from '../types'
 
 const Categories = () => {
@@ -28,15 +35,21 @@ const Categories = () => {
   )
 
   return (
-    <FlatList
-      data={categories}
-      renderItem={renderCategoryItem}
-      keyExtractor={(item) => item.idCategory}
-    />
+    <View style={styles.screen}>
+      <FlatList
+        data={categories}
+        renderItem={renderCategoryItem}
+        keyExtractor={(item) => item.idCategory}
+      />
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.primaryLight,
+  },
   categoryWrapper: {
     marginVertical: 10,
   },
