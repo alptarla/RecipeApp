@@ -1,10 +1,14 @@
+import { RouteProp, useRoute } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import { RootStackPramList } from '../types'
 
 const Meals = () => {
+  const { params } = useRoute<RouteProp<RootStackPramList, 'Meals'>>()
+
   return (
     <View style={styles.screen}>
-      <Text>Meals</Text>
+      <Text>Meals for category: {params.categoryName}</Text>
     </View>
   )
 }
